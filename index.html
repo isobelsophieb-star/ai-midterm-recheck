@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dimension-Inspired Site</title>
+  <meta name="description" content="A full-screen animated one-page website inspired by the HTML5 UP Dimension experience." />
+  <style>
+    :root {
+      --bg: #111111;
+      --bg-overlay: rgba(10, 10, 10, 0.72);
+      --panel: rgba(255, 255, 255, 0.08);
+      --panel-border: rgba(255, 255, 255, 0.18);
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.72);
+      --accent: #ffffff;
+      --accent-dark: #111111;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+      --radius: 20px;
+      --transition: 420ms cubic-bezier(.22, 1, .36, 1);
+      --max-width: 980px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      overflow: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(var(--bg-overlay), var(--bg-overlay)),
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.10), transparent 30%),
+        radial-gradient(circle at 80% 30%, rgba(255,255,255,0.08), transparent 30%),
+        radial-gradient(circle at 50% 80%, rgba(255,255,255,0.05), transparent 35%),
+        url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1600&q=80") center/cover no-repeat;
+      z-index: -3;
+      transform: scale(1.05);
+      animation: bgPulse 14s ease-in-out infinite alternate;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 42px 42px;
+      opacity: 0.06;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    @keyframes bgPulse {
+      from { transform: scale(1.03); filter: brightness(0.9); }
+      to { transform: scale(1.1); filter: brightness(1); }
+    }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    .stars span {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: rgba(255,255,255,0.85);
+      border-radius: 50%;
+      animation: twinkle linear infinite;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.15; transform: translateY(0px) scale(1); }
+      50% { opacity: 0.9; transform: translateY(-12px) scale(1.3); }
+      100% { opacity: 0.15; transform: translateY(0px) scale(1); }
+    }
+
+    #wrapper {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+      position: relative;
+    }
+
+    #main-home {
+      width: 100%;
+      max-width: 780px;
+      text-align: center;
+      transition: opacity var(--transition), transform var(--transition), visibility var(--transition);
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+      pointer-events: auto;
+    }
+
+    body.article-active #main-home {
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96);
+      pointer-events: none;
+    }
+
+    .logo {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 1.5rem;
+      border: 2px solid rgba(255,255,255,0.65);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 2rem;
+      letter-spacing: 0.1em;
+      backdrop-filter: blur(8px);
+      background: rgba(255,255,255,0.04);
+      box-shadow: var(--shadow);
+      animation: floaty 5s ease-in-out infinite;
+    }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    h1, h2, h3 {
+      margin: 0 0 1rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    #main-home h1 {
+      font-size: clamp(2.3rem, 6vw, 4.75rem);
+      line-height: 1.1;
+    }
+
+    .lead {
+      max-width: 680px;
+      margin: 0 auto 2rem;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    nav ul {
+      margin: 2rem auto 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.85rem;
+      list-style: none;
+    }
+
+    .button,
+    button,
+    input[type="submit"],
+    input[type="reset"] {
+      appearance: none;
+      border: 1px solid rgba(255,255,255,0.3);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 0.95rem 1.35rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        background var(--transition),
+        color var(--transition),
+        border-color var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 150px;
+      backdrop-filter: blur(8px);
+    }
+
+    .button:hover,
+    button:hover,
+    input[type="submit"]:hover,
+    input[type="reset"]:hover {
+      background: rgba(255,255,255,0.94);
+      color: var(--accent-dark);
+      border-color: rgba(255,255,255,1);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 36px rgba(0,0,0,0.25);
+    }
+
+    .button.primary,
+    input[type="submit"] {
+      background: rgba(255,255,255,0.92);
+      color: var(--accent-dark);
+      border-color: rgba(255,255,255,0.95);
+    }
+
+    .button.primary:hover,
+    input[type="submit"]:hover {
+      background: #ffffff;
+    }
+
+    .button.small {
+      min-width: 110px;
+      padding: 0.75rem 1rem;
+      font-size: 0.78rem;
+    }
+
+    #articles {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 2rem;
+      pointer-events: none;
+    }
+
+    .panel {
+      width: min(100%, var(--max-width));
+      max-height: calc(100vh - 4rem);
+      overflow: auto;
+      padding: 2rem;
+      border-radius: var(--radius);
+      background: rgba(20, 20, 20, 0.72);
+      border: 1px solid var(--panel-border);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(18px) scale(0.98);
+      transition:
+        opacity var(--transition),
+        transform var(--transition),
+        visibility var(--transition);
+      pointer-events: none;
+      position: absolute;
+    }
+
+    .panel.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .close {
+      border: 0;
+      background: transparent;
+      color: var(--text);
+      font-size: 1.7rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0.2rem 0.45rem;
+      min-width: auto;
+    }
+
+    .panel p {
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .hero-image,
+    .image.main {
+      width: 100%;
+      height: auto;
+      border-radius: 16px;
+      margin: 0 0 1.5rem;
+      display: block;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .col-6 {
+      grid-column: span 6;
+    }
+
+    .col-4 {
+      grid-column: span 4;
+    }
+
+    .col-12 {
+      grid-column: span 12;
+    }
+
+    .card {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 16px;
+      padding: 1.25rem;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .card h3 {
+      font-size: 0.9rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-top: 1.25rem;
+    }
+
+    form {
+      display: grid;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .fields {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .field {
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .field label {
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.8);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 0.9rem 1rem;
+      font: inherit;
+      outline: none;
+      transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: rgba(255,255,255,0.55);
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 0 0 4px rgba(255,255,255,0.08);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 160px;
+    }
+
+    ul.icons {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin: 1rem 0 0;
+    }
+
+    ul.icons li a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 44px;
+      height: 44px;
+      padding: 0 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: var(--text);
+      text-decoration: none;
+      background: rgba(255,255,255,0.04);
+      transition: all var(--transition);
+    }
+
+    ul.icons li a:hover {
+      background: rgba(255,255,255,0.94);
+      color: var(--accent-dark);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+    }
+
+    table th,
+    table td {
+      border-bottom: 1px solid rgba(255,255,255,0.12);
+      padding: 0.9rem 0.75rem;
+      text-align: left;
+      color: var(--muted);
+    }
+
+    table th {
+      color: var(--text);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+
+    blockquote {
+      margin: 1.5rem 0;
+      padding: 1rem 1.25rem;
+      border-left: 3px solid rgba(255,255,255,0.42);
+      color: rgba(255,255,255,0.82);
+      background: rgba(255,255,255,0.035);
+      border-radius: 0 12px 12px 0;
+    }
+
+    code {
+      background: rgba(255,255,255,0.08);
+      padding: 0.18rem 0.4rem;
+      border-radius: 6px;
+      font-size: 0.9em;
+    }
+
+    footer {
+      position: fixed;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 2rem);
+      text-align: center;
+      color: rgba(255,255,255,0.55);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: opacity var(--transition);
+    }
+
+    body.article-active footer {
+      opacity: 0.25;
+    }
+
+    @media (max-width: 900px) {
+      .col-6,
+      .col-4 {
+        grid-column: span 12;
+      }
+    }
+
+    @media (max-width: 700px) {
+      body {
+        overflow: auto;
+      }
+
+      #wrapper {
+        padding: 1.25rem;
+      }
+
+      .panel {
+        padding: 1.25rem;
+        max-height: calc(100vh - 2rem);
+      }
+
+      .fields {
+        grid-template-columns: 1fr;
+      }
+
+      nav ul {
+        gap: 0.65rem;
+      }
+
+      .button,
+      button,
+      input[type="submit"],
+      input[type="reset"] {
+        min-width: 132px;
+      }
+
+      footer {
+        position: static;
+        transform: none;
+        margin: 1rem auto 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" aria-hidden="true" id="stars"></div>
+
+  <div id="wrapper">
+    <main id="main-home" aria-label="Homepage intro">
+      <div class="logo">◇</div>
+      <h1>Dimension</h1>
+      <p class="lead">
+        A cinematic, full-screen, animated one-page site with modal sections,
+        smooth transitions, and navigation buttons that open each part of the experience.
+      </p>
+
+      <nav aria-label="Primary">
+        <ul>
+          <li><a href="#intro" class="button">Intro</a></li>
+          <li><a href="#work" class="button">Work</a></li>
+          <li><a href="#about" class="button">About</a></li>
+          <li><a href="#contact" class="button">Contact</a></li>
+          <li><a href="#elements" class="button">Elements</a></li>
+        </ul>
+      </nav>
+    </main>
+
+    <section id="articles">
+      <article id="intro" class="panel" aria-hidden="true">
+        <div class="panel-header">
+          <div>
+            <h2>Intro</h2>
+          </div>
+          <button class="close" aria-label="Close section">&times;</button>
+        </div>
+
+        <img
+          class="image main"
+          src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=1200&q=80"
+          alt="Minimal scenic landscape"
+        />
+
+        <p>
+          This layout is designed to feel immersive and editorial. The home screen acts
+          like a landing portal, while each section opens as an animated panel layered over
+          the background.
+        </p>
+        <p>
+          It is ideal for portfolios, brand sites, teaser pages, creative studios, or personal
+          profiles where you want a distinctive first impression without a traditional scrolling homepage.
+        </p>
+
+        <div class="actions">
+          <a href="#work" class="button primary">See Work</a>
+          <a href="#about" class="button">Learn More</a>
+        </div>
+      </article>
+
+      <article id="work" class="panel" aria-hidden="true">
+        <div class="panel-header">
+          <div>
+            <h2>Work</h2>
+          </div>
+          <button class="close" aria-label="Close section">&times;</button>
+        </div>
+
+        <img
+          class="image main"
+          src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80"
+          alt="Creative workspace"
+        />
+
+        <p>
+          Use this section to highlight featured projects, campaign launches, services, or
+          categories of work. The cards below are placeholder examples.
+        </p>
+
+        <div class="grid">
+          <div class="col-4">
+            <div class="card">
+              <h3>Project One</h3>
+              <p>A hero project with strong visual identity, storytelling, and polished execution.</p>
+              <div class="actions">
+                <a href="#contact" class="button small">Inquire</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-4">
+            <div class="card">
+              <h3>Project Two</h3>
+              <p>A second feature block for campaign systems, branding, digital launches, or creative direction.</p>
+              <div class="actions">
+                <a href="#about" class="button small">About</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-4">
+            <div class="card">
+              <h3>Project Three</h3>
+              <p>A flexible module for portfolio highlights, collaborations, product work, or strategic initiatives.</p>
+              <div class="actions">
+                <a href="#elements" class="button small">Elements</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article id="about" class="panel" aria-hidden="true">
+        <div class="panel-header">
+          <div>
+            <h2>About</h2>
+          </div>
+          <button class="close" aria-label="Close section">&times;</button>
+        </div>
+
+        <img
+          class="image main"
+          src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1200&q=80"
+          alt="Team collaboration"
+        />
+
+        <p>
+          This section is made for your biography, studio statement, brand positioning, or
+          a concise overview of your experience and approach.
+        </p>
+
+        <blockquote>
+          Great websites do not just present information. They create a feeling, then guide people through it.
+        </blockquote>
+
+        <div class="grid">
+          <div class="col-6">
+            <div class="card">
+              <h3>Approach</h3>
+              <p>
+                Blend clarity, storytelling, motion, and structure to create a site that feels
+                elegant without being complicated.
+              </p>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="card">
+              <h3>Capabilities</h3>
+              <p>
+                Branding, web design, creative direction, visual systems, content strategy,
+                product storytelling, and digital experiences.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <a href="#contact" class="button primary">Contact</a>
+        </div>
+      </article>
+
+      <article id="contact" class="panel" aria-hidden="true">
+        <div class="panel-header">
+          <div>
+            <h2>Contact</h2>
+          </div>
+          <button class="close" aria-label="Close section">&times;</button>
+        </div>
+
+        <p>
+          This is a front-end form UI. To make it actually send messages, connect it to
+          Formspree, Netlify Forms, EmailJS, or your own backend.
+        </p>
+
+        <form action="#" method="post">
+          <div class="fields">
+            <div class="field">
+              <label for="name">Name</label>
+              <input type="text" name="name" id="name" placeholder="Your name" />
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" name="email" id="email" placeholder="you@example.com" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea name="message" id="message" placeholder="Your message"></textarea>
+          </div>
+          <div class="actions">
+            <input type="submit" value="Send Message" />
+            <input type="reset" value="Reset" />
+          </div>
+        </form>
+
+        <ul class="icons">
+          <li><a href="https://github.com/" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        </ul>
+      </article>
+
+      <article id="elements" class="panel" aria-hidden="true">
+        <div class="panel-header">
+          <div>
+            <h2>Elements</h2>
+          </div>
+          <button class="close" aria-label="Close section">&times;</button>
+        </div>
+
+        <p>
+          This section shows reusable UI patterns you can keep or expand.
+        </p>
+
+        <div class="grid">
+          <div class="col-6">
+            <div class="card">
+              <h3>Buttons</h3>
+              <div class="actions">
+                <a href="#intro" class="button primary">Primary</a>
+                <a href="#work" class="button">Default</a>
+                <a href="#about" class="button small">Small</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="card">
+              <h3>Text</h3>
+              <p>
+                Use <strong>bold</strong>, <em>italics</em>, inline <code>code</code>, and concise
+                copy blocks to keep the site expressive and easy to scan.
+              </p>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="card">
+              <h3>Table</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Feature</th>
+                    <th>Status</th>
+                    <th>Notes</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Animated sections</td>
+                    <td>Included</td>
+                    <td>Hash-based modal navigation</td>
+                  </tr>
+                  <tr>
+                    <td>Responsive layout</td>
+                    <td>Included</td>
+                    <td>Optimized for desktop and mobile</td>
+                  </tr>
+                  <tr>
+                    <td>Working nav buttons</td>
+                    <td>Included</td>
+                    <td>All buttons open linked sections</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <footer>
+    Built as a Dimension-style single-page experience
+  </footer>
+
+  <script>
+    (function () {
+      const body = document.body;
+      const panels = [...document.querySelectorAll('.panel')];
+      const closeButtons = [...document.querySelectorAll('.close')];
+      const starsContainer = document.getElementById('stars');
+
+      function createStars(count = 45) {
+        const fragment = document.createDocumentFragment();
+        for (let i = 0; i < count; i++) {
+          const star = document.createElement('span');
+          star.style.left = Math.random() * 100 + '%';
+          star.style.top = Math.random() * 100 + '%';
+          star.style.animationDuration = (4 + Math.random() * 8) + 's';
+          star.style.animationDelay = (Math.random() * 6) + 's';
+          star.style.opacity = (0.2 + Math.random() * 0.8).toFixed(2);
+          fragment.appendChild(star);
+        }
+        starsContainer.appendChild(fragment);
+      }
+
+      function getPanelFromHash(hash) {
+        if (!hash) return null;
+        return document.querySelector(hash + '.panel');
+      }
+
+      function closeAllPanels(updateHash = true) {
+        panels.forEach(panel => {
+          panel.classList.remove('active');
+          panel.setAttribute('aria-hidden', 'true');
+        });
+        body.classList.remove('article-active');
+
+        if (updateHash && window.location.hash) {
+          history.pushState("", document.title, window.location.pathname + window.location.search);
+        }
+      }
+
+      function openPanel(hash, push = false) {
+        const panel = getPanelFromHash(hash);
+        if (!panel) {
+          closeAllPanels(false);
+          return;
+        }
+
+        panels.forEach(p => {
+          p.classList.remove('active');
+          p.setAttribute('aria-hidden', 'true');
+        });
+
+        panel.classList.add('active');
+        panel.setAttribute('aria-hidden', 'false');
+        body.classList.add('article-active');
+
+        if (push && window.location.hash !== hash) {
+          window.location.hash = hash;
+        }
+      }
+
+      document.addEventListener('click', function (event) {
+        const link = event.target.closest('a[href^="#"]');
+        if (!link) return;
+
+        const hash = link.getAttribute('href');
+        const targetPanel = getPanelFromHash(hash);
+
+        if (targetPanel) {
+          event.preventDefault();
+          openPanel(hash, true);
+        } else if (hash === '#') {
+          event.preventDefault();
+          closeAllPanels(true);
+        }
+      });
+
+      closeButtons.forEach(button => {
+        button.addEventListener('click', function () {
+          closeAllPanels(true);
+        });
+      });
+
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+          closeAllPanels(true);
+        }
+      });
+
+      document.addEventListener('click', function (event) {
+        const activePanel = document.querySelector('.panel.active');
+        if (!activePanel) return;
+
+        const clickedInsidePanel = event.target.closest('.panel');
+        const clickedNav = event.target.closest('a[href^="#"]');
+        if (!clickedInsidePanel && !clickedNav) {
+          closeAllPanels(true);
+        }
+      });
+
+      window.addEventListener('hashchange', function () {
+        const hash = window.location.hash;
+        if (!hash) {
+          closeAllPanels(false);
+          return;
+        }
+        openPanel(hash, false);
+      });
+
+      createStars();
+
+      if (window.location.hash && getPanelFromHash(window.location.hash)) {
+        openPanel(window.location.hash, false);
+      }
+    })();
+  </script>
+</body>
+</html>
